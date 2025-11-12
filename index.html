@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Space Law Poster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body { font-family: Calibri, Arial, sans-serif; }
+      body.modal-open { overflow: hidden; }
+      @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+      .animate-float { animation: float 6s ease-in-out infinite; }
+      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+      @keyframes sun-glow { 0%, 100% { box-shadow: 0 0 25px rgba(220, 220, 220, 0.5), 0 0 40px rgba(220, 220, 0.3); } 50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.6); } }
+      .animate-sun-glow { animation: sun-glow 5s ease-in-out infinite; }
+      .orbit-trail::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, 0.15); pointer-events: none; }
+      .orbit-trail::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 90deg, transparent, rgba(100, 255, 255, 0.4) 90deg, transparent 91deg); -webkit-mask-image: radial-gradient(transparent calc(50% - 2px), white calc(50% - 2px), white 50%, transparent 50%); mask-image: radial-gradient(transparent calc(50% - 2px), white calc(50% - 2px), white 50%, transparent 50%); pointer-events: none; }
+      @keyframes pulse-bounce { 0%, 100% { transform: scale(1) translateY(0); box-shadow: 0 5px 15px rgba(8, 145, 178, 0.4), 0 0 0 0 rgba(8, 145, 178, 0.4); } 50% { transform: scale(1.05) translateY(-8px); box-shadow: 0 10px 25px rgba(8, 145, 178, 0.6), 0 0 20px 4px rgba(8, 145, 178, 0.3); } }
+      .animate-pulse-bounce { animation: pulse-bounce 2.5s ease-in-out infinite; }
+      @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+      
+      .solution-orbit-trail::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(103, 232, 249, 0.1); }
+      @keyframes pop-bounce { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.05) translateY(-8px); } }
+      .animate-pop-bounce { animation: pop-bounce 2.5s ease-in-out infinite; }
+      @keyframes fade-in-scale { to { opacity: 1; transform: scale(1); } }
+      .animate-fade-in-scale { animation: fade-in-scale 0.3s forwards; }
+
+      @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .animate-spin-slow { animation: spin-slow 60s linear infinite; }
+      
+      @keyframes pulse-glow { 0%, 100% { opacity: 0.6; stroke-width: 2px; } 50% { opacity: 1; stroke-width: 4px; } }
+      .animate-photon-ring { animation: pulse-glow 4s ease-in-out infinite; }
+      @keyframes hover-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+      .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 10px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.5); }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-black">
+    <div id="root">
+      <div class="relative min-h-screen overflow-x-hidden text-white bg-black">
+        <div id="animated-background" class="fixed inset-0 z-0 bg-gradient-to-b from-[#0c0a1d] to-[#1d1a39] overflow-hidden"></div>
+        
+        <main class="relative z-10 flex flex-col items-center">
+          <header class="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden p-4 text-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-transparent to-cyan-900/40 opacity-75"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.1%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22M0%200h40v40H0V0zm20%2020v20h20V20H20z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50"></div>
+            
+            <div class="relative z-10">
+              <div class="group mb-8 cursor-pointer">
+                  <div class="z-10 flex h-24 w-24 transform items-center justify-center rounded-full bg-white/10 backdrop-blur-sm ring-1 ring-white/20 transition-transform duration-300 group-hover:scale-110 group-hover:bg-white/20 sm:h-28 sm:w-28 animate-float overflow-hidden">
+                      <img src="/assets/images/logo.gif" alt="AI Space Law Logo" class="w-full h-full object-cover" />
+                  </div>
+              </div>
+  
+              <h1 class="text-[48px] font-bold tracking-tighter text-transparent sm:text-[60px] md:text-[72px] bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400">
+                AI Space Law
+              </h1>
+              <p class="mt-2 max-w-3xl text-base text-gray-300 sm:text-lg">
+                Navigating the Final Frontier of Artificial Intelligence Governance
+              </p>
+            </div>
+          </header>
+          
+          <div class="flex flex-col items-center w-full p-4 sm:p-8">
+  
+              <section class="w-full max-w-4xl my-16 text-center">
+                <div class="space-y-8 text-[18px] text-gray-300 leading-relaxed">
+                    <p>The story of exploration has always been human. But as we push further into the cosmos, artificial intelligence is beginning to take the pilot’s seat.</p>
+                    <p>AI systems now guide rovers across Martian plains, monitor satellite constellations, and even make critical decisions in deep space—faster than any human ever could.</p>
+                    <p>Yet, somewhere between code and consciousness, a question arises:</p>
+                </div>
+
+                <div class="my-12">
+                    <div class="w-full h-1 mx-auto bg-gradient-to-r from-transparent via-cyan-400 to-transparent" style="max-width: 80%;"></div>
+                    <h2 class="py-6 text-[28px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400">
+                        Who decides what’s right when no one is there to decide?
+                    </h2>
+                    <div class="w-full h-1 mx-auto bg-gradient-to-r from-transparent via-cyan-400 to-transparent" style="max-width: 80%;"></div>
+                </div>
+
+                <p class="text-[18px] text-gray-300 leading-relaxed">
+                    This poster explores how AI autonomy is reshaping space exploration, exposing legal and ethical gaps in our current frameworks, and asking what responsibility means when intelligence is no longer human.
+                </p>
+              </section>
+  
+              <div class="w-full max-w-4xl space-y-16">
+                
+                <section id="problem-grid-section" class="w-full">
+                  <div class="flex flex-col items-center gap-4 mb-16 text-center">
+                    <div class="w-16 h-16 text-cyan-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
+                    </div>
+                    <h2 class="text-[24px] font-bold text-transparent sm:text-[28px] bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400">
+                      The Problem: Autonomous Risks
+                    </h2>
+                    <p class="max-w-2xl mt-1 text-gray-400 text-base">Four critical challenges orbiting the future of AI in space operations.</p>
+                  </div>
+
+                  <div class="flex flex-col items-center justify-center p-8 my-8 text-center border border-purple-500/20 bg-black/30 backdrop-blur-md rounded-xl shadow-lg shadow-purple-500/10">
+                      <p class="max-w-xl mb-8 text-lg text-gray-300">
+                          The rise of AI in space introduces unprecedented capabilities but also significant risks. From liability gaps in autonomous operations to the potential for runaway surveillance, these challenges demand careful consideration.
+                      </p>
+                      <button id="explore-risks-btn" class="px-8 py-3 font-bold text-white uppercase transition-all duration-300 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg shadow-lg hover:from-cyan-400 hover:to-purple-500 hover:shadow-cyan-500/50 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-cyan-400 animate-pulse-bounce" aria-label="Explore AI risks in space">
+                          Explore Risks
+                      </button>
+                  </div>
+              
+                  <div id="problem-content-container" class="hidden"></div>
+                </section>
+  
+                <div id="loading-spinner" class="flex flex-col items-center justify-center p-8">
+                  <div class="relative w-20 h-20">
+                    <div class="absolute inset-0 bg-cyan-400 rounded-full opacity-75 animate-ping"></div>
+                    <div class="relative flex items-center justify-center w-full h-full bg-purple-500 rounded-full">
+                      <div class="w-8 h-8 bg-cyan-200 rounded-full shadow-2xl shadow-white"></div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div id="error-message-container" class="hidden p-4 text-center text-amber-300 bg-amber-900/50 rounded-xl max-w-4xl w-full"></div>
+
+                <div id="main-content-container" class="hidden w-full max-w-4xl space-y-16">
+                    <section id="gaps-diagram-section-container"></section>
+                    <section id="solution-solar-system-section-container"></section>
+                    <section id="policy-framework-section-container">
+                        <div class="relative w-full py-24 overflow-hidden">
+                          <div class="relative z-10 container mx-auto px-4 flex flex-col items-center">
+                            <div class="w-full max-w-6xl bg-[#0c0a1d]/80 border border-cyan-500/30 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-2xl shadow-purple-500/10">
+                              <div class="flex flex-col md:flex-row gap-8 items-start mb-8">
+                                 <div class="flex flex-col gap-4 flex-shrink-0">
+                                    <div class="flex items-center justify-center w-72 h-20 bg-white/5 border border-dashed border-cyan-500/30 rounded-xl overflow-hidden">
+                                        <img src="/assets/images/img-21.jpg" alt="UNOOSA Logo" class="w-full h-full object-cover" />
+                                    </div>
+                                    <h2 class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400 tracking-tighter">UNOOSA</h2>
+                                    <p class="text-xl text-cyan-100 font-light tracking-widest uppercase">104 Countries</p>
+                                 </div>
+                                 <div class="flex-1 md:pl-8 md:border-l border-cyan-500/20 pt-2 text-base">
+                                    <ul class="space-y-4 text-gray-300">
+                                        <li class="flex gap-3"><span class="text-cyan-400 mt-1">●</span><span><strong class="text-white">Use UNOOSA as the central platform for dialogue</strong> regarding AI regulations in space.</span></li>
+                                        <li class="flex gap-3">
+                                            <span class="text-cyan-400 mt-1">●</span>
+                                            <div><span>All the major space-faring countries are already members of UNOOSA (ex. China, Russia, US, India, Japan) in which they already:</span>
+                                                <ul class="mt-2 ml-1 space-y-1 text-sm text-gray-400 border-l-2 border-cyan-500/20 pl-3">
+                                                    <li>— Participate in shaping international space law</li>
+                                                    <li>— Collaborate on peaceful uses of outer space</li>
+                                                    <li>— Access capacity-building programs and technical support</li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                 </div>
+                              </div>
+                              <div class="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mb-12"></div>
+                              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center mb-12">
+                                <div class="p-6 border border-purple-500/30 bg-purple-900/10 rounded-2xl text-center lg:text-right shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                                    <h3 class="text-xl font-bold text-purple-200 mb-2">STRATEGY</h3>
+                                    <p class="text-lg text-white font-medium leading-relaxed">Soft laws + multilingual, multi-stakeholder outreach plan</p>
+                                </div>
+                                <div class="relative flex justify-center">
+                                    <div class="relative w-full max-w-[320px] aspect-[2/3] flex items-center justify-center">
+                                        <svg viewBox="0 0 300 450" class="absolute inset-0 w-full h-full overflow-visible drop-shadow-lg">
+                                            <defs>
+                                                <linearGradient id="parchmentGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF4E0" /><stop offset="15%" stop-color="#FFE0B2" /><stop offset="85%" stop-color="#FFE0B2" /><stop offset="100%" stop-color="#FFF4E0" /></linearGradient>
+                                                <linearGradient id="rollGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E6CCA0" /><stop offset="40%" stop-color="#FFE5B4" /><stop offset="100%" stop-color="#D4B485" /></linearGradient>
+                                            </defs>
+                                            <path d="M 45,60 Q 35,225 45,390 L 255,390 Q 265,225 255,60 Z" fill="url(#parchmentGrad)" stroke="#D7CCC8" stroke-width="0.5"/>
+                                            <g><rect x="20" y="30" width="260" height="35" rx="5" fill="url(#rollGrad)" stroke="#C1A476" stroke-width="1"/><path d="M 25,30 L 25,65" stroke="#A68B5B" stroke-width="1" stroke-opacity="0.5" /><path d="M 275,30 L 275,65" stroke="#A68B5B" stroke-width="1" stroke-opacity="0.5" /></g>
+                                            <g><rect x="20" y="385" width="260" height="35" rx="5" fill="url(#rollGrad)" stroke="#C1A476" stroke-width="1"/><path d="M 25,385 L 25,420" stroke="#A68B5B" stroke-width="1" stroke-opacity="0.5" /><path d="M 275,385 L 275,420" stroke="#A68B5B" stroke-width="1" stroke-opacity="0.5" /></g>
+                                            <path d="M 45,100 L 10,115 L 45,130 Z" fill="#C1A476" />
+                                            <path d="M 255,320 L 290,335 L 255,350 Z" fill="#C1A476" />
+                                        </svg>
+                                        <div class="relative z-10 px-10 py-16 text-center flex flex-col items-center justify-center h-full">
+                                            <h3 class="font-serif font-bold text-[#1A3C6D] text-3xl leading-tight mb-6 drop-shadow-sm">AI in Space</h3>
+                                            <p class="font-serif text-[#1A3C6D] text-xl leading-relaxed font-medium">A globally cooperative path towards a safer, more regulated AI future</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-6 border border-cyan-500/30 bg-cyan-900/10 rounded-2xl text-center lg:text-left shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                                    <h3 class="text-xl font-bold text-cyan-200 mb-2">CORE PILLARS</h3>
+                                    <p class="text-lg text-white font-medium leading-relaxed">Centered on: <span class="text-cyan-300">trust</span>, <span class="text-cyan-300">transparency</span>, and <span class="text-cyan-300">shared responsibility</span> in AI space governance</p>
+                                </div>
+                              </div>
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                <div class="flex flex-col justify-center md:items-start">
+                                     <div class="bg-white/5 border-l-4 border-purple-500 p-6 rounded-r-xl">
+                                        <p class="text-lg text-gray-200 italic">Align with <strong class="text-white not-italic">Outer Space Treaty</strong> principles: <br/><span class="text-purple-300">peaceful use, benefit to all, and international cooperation.</span></p>
+                                     </div>
+                                </div>
+                                <div class="flex flex-col items-end">
+                                    <div class="text-right">
+                                        <h4 class="text-sm uppercase tracking-widest text-gray-400 mb-3">Target Groups for Framework</h4>
+                                        <div class="flex flex-wrap justify-end gap-2">
+                                            <span class="px-3 py-1 text-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-100 rounded-full">UN Bodies</span>
+                                            <span class="px-3 py-1 text-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-100 rounded-full">Regional Bodies</span>
+                                            <span class="px-3 py-1 text-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-100 rounded-full">National Agencies</span>
+                                            <span class="px-3 py-1 text-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-100 rounded-full">Private Sector</span>
+                                            <span class="px-3 py-1 text-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-100 rounded-full">Civilian Society</span>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="mt-12 pt-8 border-t border-white/10">
+                                <h4 class="text-center text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-8 uppercase tracking-wide">Key Messages</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-base">
+                                    <div class="p-6 bg-black/40 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors"><p class="text-gray-300 leading-relaxed">“Let’s make UNOOSA the centralized platform for regulations surrounding AI regulations.”</p></div>
+                                    <div class="p-6 bg-black/40 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors"><p class="text-gray-300 leading-relaxed">“AI is transforming space so let’s shape its level of decision-making together, to create a safer, more regulated AI future.”</p></div>
+                                    <div class="p-6 bg-black/40 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors"><p class="text-gray-300 leading-relaxed">“Transparency, human oversight, and shared benefits are essential.”</p></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </section>
+                    <section id="implementation-section-container">
+                        <div class="relative w-full">
+                          <div class="w-full bg-[#0c0a1d]/80 border border-purple-500/30 backdrop-blur-md rounded-2xl p-8 shadow-xl shadow-purple-500/5">
+                            <h3 class="text-[24px] md:text-[28px] font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-300 mb-8">Implementation</h3>
+                            <div class="space-y-6 text-base">
+                               <div class="flex flex-col md:flex-row gap-4">
+                                  <div class="md:w-32 flex-shrink-0"><span class="font-bold text-cyan-300 uppercase tracking-wider text-sm md:text-base border-b border-cyan-500/30 pb-1">Collaborative</span></div>
+                                  <div class="flex-1 text-gray-300 leading-relaxed">Encourage regional coordination (EU, OECD, ESA) and involve major space agencies and private actors in codeveloping ethical AI norms. Ideally, have one set of soft laws first before expansion as a stepping stone, before introducing hard laws to avoid unaligned, fragmented standards.</div>
+                               </div>
+                               <div class="h-px w-full bg-white/5"></div>
+                               <div class="flex flex-col md:flex-row gap-4">
+                                  <div class="md:w-32 flex-shrink-0"><span class="font-bold text-cyan-300 uppercase tracking-wider text-sm md:text-base border-b border-cyan-500/30 pb-1">Advocacy</span></div>
+                                  <div class="flex-1 text-gray-300 leading-relaxed">Advocate for inclusive access to AI tools and data, especially for developing countries.</div>
+                               </div>
+                               <div class="h-px w-full bg-white/5"></div>
+                               <div class="flex flex-col md:flex-row gap-4">
+                                  <div class="md:w-32 flex-shrink-0"><span class="font-bold text-cyan-300 uppercase tracking-wider text-sm md:text-base border-b border-cyan-500/30 pb-1">Transparency</span></div>
+                                  <div class="flex-1 text-gray-300 leading-relaxed">Promote several Transparency and Confidence-Building Measures (TCBMs) to clarify intent and reduce misunderstandings, especially amongst the various players due to sensitive data.</div>
+                               </div>
+                               <div class="h-px w-full bg-white/5"></div>
+                               <div class="flex flex-col md:flex-row gap-4">
+                                  <div class="md:w-32 flex-shrink-0"><span class="font-bold text-purple-300 uppercase tracking-wider text-sm md:text-base border-b border-purple-500/30 pb-1">TCBMs</span></div>
+                                  <div class="flex-1 text-gray-300 leading-relaxed">Voluntary practices that promote trust, reduce misunderstandings, and support peaceful cooperation in space activities so ex. data-sharing initiatives between agencies and private actors (ex. Copernicus open data programme).</div>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                    </section>
+                </div>
+              </div>
+          </div>
+          
+          <div id="bottom-content-container" class="hidden flex flex-col items-center w-full">
+            <div class="w-full">
+                 <section id="next-steps-section-container" class="relative w-full py-24 overflow-hidden">
+                    <div class="absolute inset-0 z-0 pointer-events-none">
+                      <div class="absolute bottom-[-300px] left-1/2 -translate-x-1/2 w-[150%] h-[600px] bg-[#003366] rounded-[50%] blur-[80px] opacity-80"></div>
+                      <div class="absolute bottom-[-280px] left-1/2 -translate-x-1/2 w-[120%] h-[500px] bg-[#0066cc] rounded-[50%] blur-[60px] opacity-60"></div>
+                      <div class="absolute bottom-[-250px] left-1/2 -translate-x-1/2 w-[100%] h-[400px] bg-[#4db8ff] rounded-[50%] blur-[50px] opacity-30"></div>
+                      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+                    </div>
+                    <div class="relative z-10 container mx-auto px-4">
+                        <div class="flex flex-col items-center mb-20">
+                            <h2 class="text-4xl md:text-5xl font-bold text-white text-center tracking-tight drop-shadow-lg">Next Steps</h2>
+                            <div class="w-48 h-1 bg-white mt-4 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="hidden xl:grid grid-cols-6 gap-y-0 gap-x-8 justify-items-center w-full max-w-7xl -space-y-12"> 
+                                 <div class="col-start-1 col-span-2"><div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="hexGradientBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(34, 211, 238, 0.3)" /><stop offset="100%" stop-color="rgba(59, 130, 246, 0.4)" /></linearGradient><filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter></defs><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">UNOOSA Hub</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Keep UNOOSA as the central dialogue platform for AI regulation. Clarify the relevance and importance of their participation for maintaining a safer AI regulatory future for their nations.</div></div></div></div>
+                                 <div class="col-start-3 col-span-2"><div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Soft law launch</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Clear, flexible norms now to avoid future legal gaps. Soft laws can help us with directions to close legal gaps later as we obtain more input from our stakeholders: actors, nations and companies.</div></div></div></div>
+                                 <div class="col-start-5 col-span-2"><div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Multilingual translations</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Translate brief into multiple languages for accessibility and global reach.</div></div></div></div>
+                                 <div class="col-start-2 col-span-2 -mt-20"><div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Private Sector Advocacy</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Engage leading private space actors e.g., SpaceX, Blue Origin, Astroscale, Isar Aerospace in AI policy dialogues to mitigate downstream risks.</div></div></div></div>
+                                 <div class="col-start-4 col-span-2 -mt-20"><div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Channels</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md"><ul class="text-left list-disc pl-4 space-y-2 text-sm"><li>ESA and OECD policy forums (ex. ESA’s AI4EO, UN-SPIDER)</li><li>Space law conferences</li><li>UNOOSA committee meetings</li></ul></div></div></div></div>
+                            </div>
+                            <div class="hidden md:flex xl:hidden flex-wrap justify-center gap-4 max-w-5xl">
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">UNOOSA Hub</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Keep UNOOSA as the central dialogue platform for AI regulation. Clarify the relevance and importance of their participation for maintaining a safer AI regulatory future for their nations.</div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Soft law launch</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Clear, flexible norms now to avoid future legal gaps. Soft laws can help us with directions to close legal gaps later as we obtain more input from our stakeholders: actors, nations and companies.</div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Multilingual translations</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Translate brief into multiple languages for accessibility and global reach.</div></div></div>
+                                <div class="flex justify-center gap-4 w-full -mt-16">
+                                    <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Private Sector Advocacy</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Engage leading private space actors e.g., SpaceX, Blue Origin, Astroscale, Isar Aerospace in AI policy dialogues to mitigate downstream risks.</div></div></div>
+                                    <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Channels</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md"><ul class="text-left list-disc pl-4 space-y-2 text-sm"><li>ESA and OECD policy forums (ex. ESA’s AI4EO, UN-SPIDER)</li><li>Space law conferences</li><li>UNOOSA committee meetings</li></ul></div></div></div>
+                                </div>
+                            </div>
+                            <div class="md:hidden flex flex-col items-center gap-8">
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">UNOOSA Hub</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Keep UNOOSA as the central dialogue platform for AI regulation. Clarify the relevance and importance of their participation for maintaining a safer AI regulatory future for their nations.</div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Private Sector Advocacy</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Engage leading private space actors e.g., SpaceX, Blue Origin, Astroscale, Isar Aerospace in AI policy dialogues to mitigate downstream risks.</div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Soft law launch</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Clear, flexible norms now to avoid future legal gaps. Soft laws can help us with directions to close legal gaps later as we obtain more input from our stakeholders: actors, nations and companies.</div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Channels</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md"><ul class="text-left list-disc pl-4 space-y-2 text-sm"><li>ESA and OECD policy forums (ex. ESA’s AI4EO, UN-SPIDER)</li><li>Space law conferences</li><li>UNOOSA committee meetings</li></ul></div></div></div>
+                                <div class="relative w-72 h-80 flex-shrink-0 group transition-transform hover:scale-105 duration-300"><svg class="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M50 0 L100 28 L100 87 L50 115 L0 87 L0 28 Z" fill="url(#hexGradientBlue)" stroke="rgba(165, 243, 252, 0.6)" stroke-width="1.5" filter="url(#glow)" class="transition-all duration-300 group-hover:stroke-white group-hover:stroke-[2px] group-hover:fill-cyan-600/40"/></svg><div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10"><h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider border-b border-cyan-200/50 pb-1">Multilingual translations</h3><div class="text-sm text-white font-medium leading-relaxed drop-shadow-md">Translate brief into multiple languages for accessibility and global reach.</div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                 </section>
+            </div>
+            <section id="references-section-container" class="relative w-full py-16 border-t border-white/5 bg-black">
+              <div class="container mx-auto px-4 max-w-4xl">
+                <div id="references-toggle" role="button" tabindex="0" aria-expanded="false" class="flex items-center justify-center mb-8 cursor-pointer group">
+                    <h3 class="text-[24px] md:text-[28px] font-bold text-gray-500 uppercase tracking-[0.2em] group-hover:text-gray-300 transition-colors">References</h3>
+                    <svg id="references-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 ml-4 text-gray-500 group-hover:text-gray-300 transition-transform transform">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
+                <div id="references-content" class="hidden h-96 overflow-y-auto custom-scrollbar pr-4 text-gray-500 text-xs font-light leading-relaxed space-y-3">
+                    <p>Ancient vector blank aged worn paper scroll with yellowed coloring and ragged torn edges | Free Vector. (n.d.). Freepik. Retrieved November 11, 2025, from https://www.freepik.com/free-vector/ancient-vector-blank-aged-worn-paper-scroll-with-yellowed-coloring-ragged-torn-edges_10700662.htm</p>
+                    <p>Artificial intelligence in space. (n.d.). Retrieved November 11, 2025, from https://www.esa.int/Enabling_Support/Preparing_for_the_Future/Discovery_and_Preparation/Artificial_intelligence_in_space</p>
+                    <p>Baruah, M., & Bhanu, A. P. (2025). Applicability of Artificial Intelligence in Space Activities. IJFMR - International Journal For Multidisciplinary Research, 7(3). https://doi.org/10.36948/ijfmr.2025.v07i03.43992</p>
+                    <p>Bengio, Y., Hinton, G., Yao, A., Song, D., Abbeel, P., Darrell, T., Harari, Y. N., Zhang, Y.-Q., Xue, L., Shalev-Shwartz, S., Hadfield, G., Clune, J., Maharaj, T., Hutter, F., Baydin, A. G., McIlraith, S., Gao, Q., Acharya, A., Krueger, D., … Mindermann, S. (2024). Managing extreme AI risks amid rapid progress. Science, 384(6698), 842–845. https://doi.org/10.1126/science.adn0117</p>
+                    <p>Bratu, I., Lodder, A., & Linden, T. van der. (2021). Autonomous Space Objects and International Space Law: Navigating the Liability Gap. Indonesian Journal of International Law, 18(3). https://doi.org/10.17304/ijil.vol18.3.818</p>
+                    <p>Bratu, I., Lodder, A., & Van Der Linden, T. (2021). Autonomous Space Objects and International Space Law: Navigating the Liability Gap. Indonesian Journal of International Law, 18(3). https://doi.org/10.17304/ijil.vol18.3.818</p>
+                    <p>Dantzler, D. (2025, November 10). United Nations Office for Outer Space Affairs soft law policy implementation, phrasing on regulations and next steps for inclusion of private actors [Personal communication].</p>
+                    <p>Drapeau des États-Unis. (2025). In Wikipédia. https://fr.wikipedia.org/w/index.php?title=Drapeau_des_%C3%89tats-Unis&oldid=229473670</p>
+                    <p>Flag of China. (2025). In Wikipedia. https://en.wikipedia.org/w/index.php?title=Flag_of_China&oldid=1318444726</p>
+                    <p>Flag of India. (2025). In Wikipedia. https://en.wikipedia.org/w/index.php?title=Flag_of_India&oldid=1321179428</p>
+                    <p>Flag of Japan. (2025). In Wikipedia. https://en.wikipedia.org/w/index.php?title=Flag_of_Japan&oldid=1315443267</p>
+                    <p>Flag of Russia. (2025). In Wikipedia. https://en.wikipedia.org/w/index.php?title=Flag_of_Russia&oldid=1316751805</p>
+                    <p>Graham, T., Thangavel, K., & Martin, A.-S. (2024). Navigating AI-lien Terrain: Legal liability for artificial intelligence in outer space. Acta Astronautica, 217, 197–207. https://doi.org/10.1016/j.actaastro.2024.01.039</p>
+                    <p>Li, A. S. (2025). Autonomizing Outer Space: Updating the Liability Convention for the Rise of Artificial Intelligence (AI). UC Irvine Law Review, 15(1). https://escholarship.org/uc/item/4n97x3hs</p>
+                    <p>Marboe, I. (2014, November 20). Space Law Treaties and Soft Law Development. https://www.unoosa.org/documents/pdf/spacelaw/activities/2014/pres02E.pdf</p>
+                    <p>Martin, A. S., & Freeland, S. R. (2020). Artificial Intelligence – A Challenging Realm for Regulating Space Activities. Annals of Air and Space Law, XLV, 275–306.</p>
+                    <p>Martin, A.-S., & Freeland, S. (2021). The Advent of Artificial Intelligence in Space Activities: New Legal Challenges. Space Policy, 55, 101408. https://doi.org/10.1016/j.spacepol.2020.101408</p>
+                    <p>Oche, P. A., Ewa, G. A., & Ibekwe, N. (2024). Applications and Challenges of Artificial Intelligence in Space Missions. IEEE Access, 12, 44481–44509. https://doi.org/10.1109/ACCESS.2021.3132500</p>
+                    <p>Outer Space Treaty. (n.d.). Retrieved November 11, 2025, from https://www.unoosa.org/oosa/en/ourwork/spacelaw/treaties/outerspacetreaty.html</p>
+                    <p>Pagallo, U., Bassi, E., & Durante, M. (2023). The Normative Challenges of AI in Outer Space: Law, Ethics, and the Realignment of Terrestrial Standards. Philosophy & Technology, 36(2), 23. https://doi.org/10.1007/s13347-023-00626-7</p>
+                    <p>Responses to the set of questions provided by the Moderator and Vice – Moderator of the Scheduled Informal Consultations on Space Resources. (2021). United Nations Office for Outer Space Affairs Committee on the Peaceful Uses of Outer Space. https://www.unoosa.org/documents/doc/copuos/space-resources/60_LSC-CRP08-Responses-of-States-on-Space-Resources-27-May-2021-MNr1.docx</p>
+                    <p>Thangavel, K., Sabatini, R., Gardi, A., Ranasinghe, K., Hilton, S., Servidia, P., & Spiller, D. (2024). Artificial Intelligence for Trusted Autonomous Satellite Operations. Progress in Aerospace Sciences, 144, 100960. https://doi.org/10.1016/j.paerosci.2023.100960</p>
+                    <p>Urban, J. A. (2016). Soft Law: The Key to Security in a Globalized Outer Space. SSRN Electronic Journal. https://doi.org/10.2139/ssrn.2718328</p>
+                    <p>Weber, A., & Franke, P. (2024). Space-Domain AI Applications need Rigorous Security Risk Analysis. Proceedings 2024 Workshop on Security of Space and Satellite Systems. Workshop on Security of Space and Satellite Systems, San Diego, CA, USA. https://doi.org/10.14722/spacesec.2024.23008</p>
+                    <p>Yazici, T. (Working G. C., Martin, A.-S., Wood, S., Almenar, R., Kucher, L., Zielinski, L. Y., Wedenig, S.-M., & Tricco, G. (2024). Balancing Innovation and Responsibility: International Recommendations for AI Regulation in Space. International Institute of Space Law (IISL).</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+        </main>
+        <div id="modal-root"></div>
+      </div>
+    </div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
